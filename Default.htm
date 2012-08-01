@@ -1,0 +1,392 @@
+<html>
+<head>
+<title>Conic Intersections</title>
+</head>
+<body bgcolor="#CCFFFF">
+<h1 align="center">Konusni preseci</h1>
+
+Up to date <a href="Conics.zip">fajlovi</a>.
+Tekst koji sledi nije up to date.
+<p>
+<a href="Conics.gif"><img src="Conics.gif"
+alt="Click to zoom in"
+align="right"
+width="40%"></a>
+<h2>Uvod</h2>
+
+Namena ovog teksta je da diskutuje pisanje programa koji sa ulaza cita definicije tacaka, pravih i konusnih preseka, a na izlaz ispisuje 
+<a href="http://www.cs.indiana.edu/docproject/programming/postscript/postscript.html">PostScript</a> 
+program koji predstavlja odgovarajuci crtez. 
+Tacka 
+<math>
+ <em>A</em>
+</math>
+moze biti definisana kao:
+<ol type="i">
+<li> slucajno izabrana tacka u ravni: <code>A=Random()</code>, 
+<li> slucajno izabrana tacka na vec poznatoj pravoj
+<math>
+ <em>p</em>
+</math>: <code>A=Random(p)</code>, 
+<li> presek dve vec poznate prave, 
+<li> druga tacka preseka poznate prave i konusnog preseka cija je jedna tacka preseka poznata. 
+</ol>
+Slicno vazi i za definisanje ostalih elemenata crteza. 
+Svaki element konstrukcije moze biti vidljiv ili nevidljiv.
+Nevidljivi elementi konstrukcije ucestvuju u gradnji konstrukcije
+ali se ne prikazuju na crtezu.
+Vidljive prave se crtaju jednostavnom PostScript komandom,
+vidljive tacke su oblika malog osmougla a 
+konusni presek je izlomljena linija sa dovoljnim brojem temena da izgleda glatko.
+<p>
+Sve konstrukcije bice izvedene tako da ne izvode iz skupa racionalnih tacaka. 
+Tacke i prave se interno u programu predstavljaju svojim homogenim koordinatama, sto znaci da se sa racionalnih koordinata
+<math>
+ (<em>x</em>, <em>y</em>)
+</math>
+preslo na celobrojne
+<math>
+ (<em>xz</em>, <em>yz</em>, <em>z</em>)
+</math>
+(<math>
+ <em>z</em>
+</math>
+je Najmanji Zajednicki Sadrzalac za imenioce razlomaka
+<math>
+ <em>x</em>
+</math>
+i
+<math>
+ <em>y</em>
+</math>).
+Konusni presek je lista od bar pet tacaka, koliko je neophodno da jednoznacno odredi tu koniku.
+<p>
+Imena objekata koji se na crtezu nalaze bice stampana koriscenjem LaTeX okoline 
+<code>
+ {picture} 
+</code>
+da bi velicina fonta na crtezu bila uskladjena sa velicinom fonta u pratecem tekstu i da se ne bi menjala pri skaliranju PostScripta.
+
+<h2>Razrada</h2>
+
+Slede objasnjenja koja se mogu pratiti bez predznanja iz Projektivne geometrije.
+<p>
+Ravan crtanja smestamo u trodimenzioni euklidski prostor kao ravan cija je jednacina
+<math>
+ <em>z</em> = 1
+</math>.
+Tacke iz ravni crtanja projektujemo pravolinijski na jedinicnu sferu.
+Centar projektovanja je koordinatni pocetak.
+Svaka tacka iz ravni crtanja odredjuje zrak projektovanja koji je jedna prava kroz koordinatni pocetak.
+Pravu koja prolazi kroz koordinatni pocetak zovemo projektivna tacka.
+<p>
+Primetimo da postoje projektivne tacke koje nisu zraci projektovanja tacaka iz ravni crtanja.
+Takve projektivne tacke su horizontalne prave koje prolaze kroz koordinatni pocetak.
+<p>
+Zraci projektovanja tacaka koje leze na pravoj u ravni crtanja obrazuju ravan.
+Ravan koja prolazi kroz koordinatni pocetak zovemo projektivna prava.
+Horizontalna ravan koja prolazi kroz koordinatni pocetak je jedina projektivna prava koja ne nastaje projekcijom neke prave iz ravni crtanja.
+<p>
+Izmedju skupa projektivnih tacaka i skupa projektivnih pravih uspostavljamo preslikavanje na sledeci nacin. Projektivna tacka i projektivna prava su 
+
+<h2>Stari Tekst</h2>
+
+<dl compact>
+<dt> <strong>Definicija</strong>. <dd>
+P-tackom nazivamo pravu u 
+<math>
+ <em>R</em><sup>3</sup>
+</math>
+koja prolazi kroz koordinatni pocetak.
+P-prava je ravan u 
+<math>
+ <em>R</em><sup>3</sup>
+</math>
+koja takodje prolazi kroz koordinatni pocetak.
+Za P-tacku kazemo da pripada P-pravoj ako odgovarajuca 
+prava pripada ravni u uobicajenom smislu u
+<math>
+ <em>R</em><sup>3</sup>
+</math>.
+</dl>
+<p>
+P-tacke i P-prave su predmet izucavanja Projektivne geometrije u ravni. 
+Postoji i drugaciji nacin preciziranja predmeta izucavanja 
+Projektivne planimetrije, naime aksiomatski pristup, 
+ali on ovde radi jednostavnosti izlaganja nece biti naveden.
+<p>
+Neka je 
+<math>
+ <em>A</em>
+</math>
+P-tacka i 
+<math>
+ (<em>x, y, z</em>)
+</math>
+uredjena trojka iz 
+<math>
+ <em>R</em><sup>3</sup>
+</math>
+koja joj pripada.
+Ako vazi
+<math>
+ <em>x</em><sup>2</sup> +
+ <em>y</em><sup>2</sup> +
+ <em>z</em><sup>2</sup> =/= 0
+</math>
+tada 
+<math>
+ (<em>x, y, z</em>)
+</math>
+zovemo <em>homogene koordinate</em> P-tacke
+<math>
+ <em>A</em>
+</math>.
+Primetimo da ako su
+<math>
+ (<em>x, y, z</em>)
+</math>
+homogene koordinate P-tacke
+<math>
+ <em>A</em>
+</math>
+onda su to i 
+<math>
+ (<em>kx, ky, kz</em>)
+</math>
+za svaki realan broj
+<math>
+ <em>k</em> =/= 0
+</math>.
+<p>
+Prema tome imamo sledece parce koda.
+<blockquote>
+<pre>
+type point=^record x,y,z: real end;
+
+function newpoint(x0,y0,z0: real): point;
+var p: point;
+begin
+ new(p);
+ p^.x:=x0; p^.y:=y0; p^.z:=z0;
+ newpoint:=p
+end;
+</pre>
+</blockquote>
+<p>
+Ravan koja prolazi kroz koordinatni pocetak u potpunosti je odredjena
+svojom normalom (prava!) u koordinatnom pocetku.
+Na taj nacin ostvarena je prirodna bijekcija skupova P-tacaka i P-pravih
+Projektivne planimetrije.
+Homogene koordinate P-prave se definisu da budu homogene koordinate
+odgovarajuce P-tacke.
+<blockquote>
+<pre>
+type line=point;
+</pre>
+</blockquote>
+<p>
+Ako P-tacka pripada P-pravoj,
+onda je skalarni proizvod njihovih homogenih koordinata jednak nuli,
+jer je svaka prava u ravni normalna na normalu te ravni.
+<blockquote>
+<pre>
+function scalar(p: point; l: line): real;
+begin
+ scalar:=p^.x*l^.x + p^.y*l^.y + p^.z*l^.z
+end;
+
+function element(p: point; l: line): boolean;
+begin
+ element:=scalar(p,l)=0
+end;
+</pre>
+</blockquote>
+<p>
+Ako imamo zadata dva vektora,
+onda vektor normalan na oba nalazimo kao njihov vektorski proizvod.
+To nam daje postupak za nalazenje P-tacke koja je presek dve P-prave.
+<blockquote>
+<pre>
+function vector(l1,l2: line): point;
+begin
+ vector:=newpoint(
+  l1^.y * l2^.z - l1^.z * l2^.y,
+  l1^.z * l2^.x - l1^.x * l2^.z,
+  l1^.x * l2^.y - l1^.y * l2^.x)
+end;
+</pre>
+</blockquote>
+Zbog tzv principa dualnosti, koji je posledica gore navedene prirodne bijekcije, za nalazenje P-prave koja prolazi kroz dve zadate P-tacke mozemo takodje koristiti funkciju 
+<code>vector</code>.
+<p>
+Prva neelementarna konstrukcija je konstrukcija preseka pravih
+<math>
+ <em>AB</em>
+</math>
+i
+<math>
+ <em>CD</em>
+</math>,
+pri cemu su 
+<math>
+ <em>A, B, C, D</em>
+</math>
+date tacke.
+U Projektivnoj geometriji se ta tacka zove
+dijagonalna tacka (jedna od tri) potpunog cetvorotemenika
+<math>
+ <em>ABCD</em>
+</math>.
+<blockquote>
+<pre>
+function perspective(A1,S: point, p: line): point;
+(* Konstruise sliku tacke A1 perspektivnim preslikavanjem *)
+(* sa centrom S na pravoj p *)
+var a: line; A2: point;
+begin
+ a:=vector(A1,S); A2:=vector(a,p);
+ dispose(a); perspective:=A2
+end;
+</pre>
+</blockquote>
+<blockquote>
+<pre>
+function diagonalpoint(A,B,C,D: point): point;
+(* Konstruise dijagonalnu tacku cetvorotemenika ABCD *)
+(* u preseku naspramnih strana AB i CD *)
+var p: line; X: point;
+begin
+ p:=vector(C,D); X:=perspective(A,B,p);
+ dispose(p); diagonalpoint:=X
+end;
+</pre>
+</blockquote>
+<blockquote>
+<pre>
+function diagonalline(A,B,C,D: point): line;
+(* Konstruise dijagonalnu stranu cetvorotemenika ABCD *)
+(* naspram diagonalpoint(A,B,C,D) *)
+var Y,Z: point; x: line;
+begin
+ Y:=diagonalpoint(B,C,A,D); Z:=diagonalpoint(A,C,B,D);
+ x:=vector(Y,Z); dispose(Y); dispose(Z);
+ diagonalline:=x
+end;
+</pre>
+</blockquote>
+<p>
+Sledi konstrukcija ose projektivnog preslikavanja ili tzv Papusove prave za sest tacaka koje leze na dve prave.
+<blockquote>
+<pre>
+function pappus(a,b,c,d,e: line): line;
+(* Konstruise Papusovu pravu za tacke ae,be,ce,ad,bd,cd *)
+var P,Q: point; o: line;
+begin
+ P:=diagonalline(c,b,d,e); Q:=diagonalline(a,b,d,e);
+ o:=vector(P,Q); dispose(P); dispose(Q);
+ pascal:=o
+end;
+</pre>
+</blockquote>
+<p>
+Sledeca funkcija projektuje tacku
+<math>
+ <em>X</em>
+</math>
+na krivu
+<math>
+ <em>B, D, E, DO, EO</em>
+</math>
+perspektivno iz
+<math>
+ <em>E</em>
+</math>
+koriscenjem projektivnog preslikavanja iz Stajnerove teoreme.
+Preslikavanje je perspektivno akko su 
+<math>
+ <em>D, E, O</em>
+</math> kolinearne.
+<blockquote>
+<pre>
+function stajner(B,D,E,O,X: point): point;
+(* Stajnerova teorema kaze da se x1 i x2 seku *)
+(* u tacki koja pripada konici akko je x2 slika od x1 *)
+(* u projektivnom preslikavanju: EO,b1,ED -> DE,b2,DO *)
+var b1,b2,x0,x1,x2: line; F: point;
+begin
+ x1:=vector(E,X); b1:=vector(E,B); b2:=vector(D,B);
+ x0:=perspective(x1,b2,O); x2:=perspective(x0,b1,D);
+ F:=vector(x1,x2); dispose(b1); dispose(b2);
+ dispose(x0); dispose(x1); dispose(x2);
+ stajner:=F
+end;
+</pre>
+</blockquote>
+<p>
+Sledi konstrukcija krive.
+<blockquote>
+<pre>
+const points=20; pi=3.1415926;
+procedure showconic(B,D,E,O: point);
+var P: point; t: real;
+begin
+ writeln('newpath'); new(P);
+ P^.x:=D^.x-B^.x;
+ P^.y:=D^.y-B^.y;
+ P^.z:=D^.z-B^.z;
+ with P^ do writeln(' ',x/z:6:2,' ',y/z:6:2,' moveto');
+ for i:=1 to points-1 do begin
+  t:=tan((i/points-0.5)*pi);
+  P^.x:=B^.x + (D^.x-B^.x) * t;
+  P^.y:=B^.y + (D^.y-B^.y) * t;
+  P^.z:=B^.z + (D^.z-B^.z) * t;
+  with stajner(B,D,E,O,P)^ do
+  writeln(' ',x/z:6:2,' ',y/z:6:2,' lineto');
+ end; dispose(P)
+ writeln('closepath');
+ writeln('stroke');
+end;
+</pre>
+</blockquote>
+<p>
+Konstrukcija duzi.
+<blockquote>
+<pre>
+procedure showsegment(A,B: point);
+begin
+ writeln('newpath');
+ with A^ do writeln(' ',x/z:6:2,' ',y/z:6:2,' moveto');
+ with B^ do writeln(' ',x/z:6:2,' ',y/z:6:2,' lineto');
+ writeln('stroke');
+end;
+</pre>
+</blockquote>
+<p>
+Test program.
+<blockquote>
+<pre>
+program conics;
+var A,B,C,D,E,O: point;
+begin
+ writeln('%!');
+ writeln('%%BoundingBox 0 0 144 144');
+ writeln('% This is an automaticaly generated .eps file.');
+ writeln('% Do not edit! Edit the source and recompile.');
+ writeln('% See http://www.im.ns.ac.yu/~nenad/Conic/');
+ A:=newpoint(92,54,1);
+ B:=newpoint(23,65,1);
+ C:=newpoint(72,71,1);
+ D:=newpoint(76,41,1);
+ E:=newpoint(73,83,1);
+ showsegment(B,D);
+ showsegment(B,E);
+ O:=pappus(A,B,C,D,E);
+ showsegment(O,D);
+ showsegment(O,E);
+ showconic(B,D,E,O)
+end.
+</pre>
+</blockquote>
+</body>
+</html>
