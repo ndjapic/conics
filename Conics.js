@@ -1,11 +1,11 @@
 //program conics;
 
 //const
- ZERO=0.0;
- HALF=0.5;
- ONE=1.0;
- BIGINTEGER=1024;
- BIGREAL=1024.0;
+ ZERO = 0.0;
+ HALF = 0.5;
+ ONE = 1.0;
+ BIGINTEGER = 1024;
+ BIGREAL = 1024.0;
 //type
 // tpoint=record x,y,z: real end; point=^tpoint;
 // line=point; //(* Duality! *)
@@ -14,92 +14,92 @@ var
  urx,ury, //(* The coordinates of the upper-right corner of the image. *)
  epsilon
 
-function newpoint(x0,y0,z0) return {x:x0,y:y0,z:z0} //(* The constructor. *)
+function newpoint(x0,y0,z0) return {x:x0, y:y0, z:z0} //(* The constructor. *)
 
-function plain(A) return newpoint(A.x/A.z,A.y/A.z,one) //(* Projects point on the drawing plane z=1. *)
+function plain(A) return newpoint(A.x/A.z, A.y/A.z, ONE) //(* Projects point on the drawing plane z=1. *)
 
 function norm(A) return Math.abs(A.x) + Math.abs(A.y) + Math.abs(A.z) //(* The distance from (0,0,0). Any type of it. *)
 
 function normed(A){ //(* Projects point on the unit sphere (or cube or octaedar). *)
- var r:=norm(A);
- if A.z<zero then r:=-r
- return newpoint(A.x/r,A.y/r,A.z/r)
+ var r = norm(A)
+ if(A.z<ZERO) r=-r
+ return newpoint(A.x/r, A.y/r, A.z/r)
 }
 
 function randominteger() //(* A random integer in the interval [0,1024). *)
- return Math.floor((Math.random()*biginteger)+1)
+ return Math.floor((Math.random() * BIGINTEGER) + 1)
 
 function randomreal()
 // (* A random number in the interval (-1,1). Densest distribution around zero. *)
 // (* A random number in the interval (0,1). Densest distribution of about 1/2. *)
 // (* randomreal:=(randominteger-randominteger)/bigreal *)
- return half+half*(randominteger()-randominteger())/bigreal
+ return HALF + HALF * (randominteger() - randominteger()) / BIGREAL
 
 function randompoint() //(* Random point in the plane (unit square). *)
- return normed(newpoint(randomreal,randomreal,one))
+ return normed(newpoint(randomreal(), randomreal(), ONE))
 
 function scalar(A,p) //(* Dot product. Should be changed to distance(...). *)
  return A.x*p.x + A.y*p.y + A.z*p.z
 
 function element(A,p) //(* Currently not used. *)
- return scalar(A,p)==zero
+ return scalar(A,p)==ZERO
 
 function vector(p1,p2)
-(* Cross product. Base for any construction. *)
-(* Returns the intersection point of two straight lines, and dual, line through the two points. *)
+//(* Cross product. Base for any construction. *)
+//(* Returns the intersection point of two straight lines, and dual, line through the two points. *)
  return normed(newpoint(
   p1.y * p2.z - p1.z * p2.y,
   p1.z * p2.x - p1.x * p2.z,
   p1.x * p2.y - p1.y * p2.x))
 
 function mixed(A,B,C) //(* Mixed product. *)
- return scalar(A,vector(B,C))
+ return scalar(A, vector(B,C))
 
 function area(A,B,C) //(* Area of triangle ABC. *)
- return Math.abs(mixed(plain(A),plain(B),plain(C))*half)
+ return Math.abs(mixed(plain(A), plain(B), plain(C)) * HALF)
 
 //(* Beginning of constructions. *)
 
 function perspective(A1,S, p)
 //(* Constructs a perspective image of a point A1 *)
 //(* on the line p with respect to center S. *)
- return vector(vector(A1,S),p)
+ return vector(vector(A1,S), p)
 
 function diagonalpoint(A,B,C,D)
 //(* Constructs a diagonal apex point of a complete quadrangle ABCD *)
 //(* as the intersection of the opposite sides AB and CD. *)
- return perspective(A,B,vector(C,D))
+ return perspective(A, B, vector(C,D))
 
 function diagonalline(A,B,C,D)
 //(* Construct a diagonal side of the quadrangle ABCD *)
 //(* across diagonalpoint(A,B,C,D). *)
- return vector(diagonalpoint(B,C,A,D),diagonalpoint(A,C,B,D))
+ return vector(diagonalpoint(B,C,A,D), diagonalpoint(A,C,B,D))
 
 function middle(A,B,C,D)
 //(* Returns the center of the segment AB in affine geometry with the absolute line CD. *)
- return perspective(A,B,diagonalline(A,B,C,D))
+ return perspective(A, B, diagonalline(A,B,C,D))
 
 function harmonic(B,D,E,O)
 //(* Applies the harmonic homology *)
 //(* with center O and axis DE to point B. *)
- return middle(O,diagonalpoint(B,O,D,E),D,diagonalpoint(B,D,O,E))
+ return middle(O, diagonalpoint(B,O,D,E), D, diagonalpoint(B,D,O,E))
 
 function pappus(a,b,c,d,e)
 //(* Construct Pappus' line of the points ae, be, ce, ad, bd, cd. *)
- return vector(diagonalline(c,b,d,e),diagonalline(a,b,d,e))
+ return vector(diagonalline(c,b,d,e), diagonalline(a,b,d,e))
 
 function steiner(B,D,E,O,X){
 //(* Constructs the intersection of the curve B,D,E,EC,DO and line EX. *)
 //(* Steiner's theorem says that x1 and x2 intersect *)
 //(* at a point which belongs to the conic if and only if x1 is the image of x2 *)
 //(* with respect to the projective mapping: EO,EB,ED -> DE,DB,DO *)
- var x1=vector(E,X)
- var x0=perspective(x1,vector(D,B),O)
- var x2=perspective(x0,vector(E,B),D)
+ var x1 = vector(E,X)
+ var x0 = perspective(x1, vector(D,B), O)
+ var x2 = perspective(x0, vector(E,B), D)
  return vector(x1,x2)
 }
 
-(* Beginning of the part in charge of output. *)
+//(* Beginning of the part in charge of output. *)
 
 procedure writereal(r: real);
 begin
